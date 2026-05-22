@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Handwritten Digit Recognizer</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f766e'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial' font-size='34' font-weight='700' fill='white'%3E5%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <div class="draw-area">
+          <div class="toolbar">
+            <div>
+              <p class="eyebrow">MNIST CNN</p>
+              <h1>Handwritten Digit Recognizer</h1>
+            </div>
+            <label class="upload-button">
+              Upload Image
+              <input id="uploadInput" type="file" accept="image/*">
+            </label>
+          </div>
+
+          <canvas id="digitCanvas" width="280" height="280" aria-label="Drawing canvas"></canvas>
+
+          <div class="actions">
+            <button id="clearButton" type="button">Clear</button>
+            <button id="predictButton" class="primary" type="button">Predict</button>
+          </div>
+        </div>
+
+        <aside class="results">
+          <p class="eyebrow">Prediction</p>
+          <div id="digitResult" class="digit-result">?</div>
+          <p id="confidenceResult" class="confidence">Confidence: -</p>
+          <div id="probabilityList" class="probability-list"></div>
+        </aside>
+      </section>
+
+      <section class="training-panel">
+        <div>
+          <p class="eyebrow">Training Output</p>
+          <h2>Accuracy and loss curves</h2>
+        </div>
+        <img src="/training-curves" alt="Training accuracy and loss curves">
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
