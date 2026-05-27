@@ -1,4 +1,3 @@
-"""Shared model loading and image preprocessing for digit recognition."""
 
 from __future__ import annotations
 
@@ -19,7 +18,6 @@ _model = None
 
 
 def get_model():
-    """Load the TensorFlow model once and reuse it for later predictions."""
     global _model
     if _model is None:
         if not MODEL_PATH.exists():
@@ -31,7 +29,6 @@ def get_model():
 
 
 def preprocess(img: Image.Image) -> np.ndarray:
-    """Convert a drawn or uploaded image into the 28x28 MNIST input format."""
     img = img.convert("L")
     img = ImageOps.invert(img)
     img = img.resize((28, 28), Image.Resampling.LANCZOS)
@@ -61,7 +58,6 @@ def preprocess(img: Image.Image) -> np.ndarray:
 
 
 def predict_digit(img: Image.Image) -> dict:
-    """Return the predicted digit, confidence, and all class probabilities."""
     arr = preprocess(img)
     probs = get_model().predict(arr, verbose=0)[0]
     digit = int(np.argmax(probs))

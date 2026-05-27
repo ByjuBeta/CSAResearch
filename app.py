@@ -1,4 +1,4 @@
-"""Website for the handwritten digit recognizer."""
+"""Website for the image classifier."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 from PIL import Image
 
-from digit_model import predict_digit
+from image_model import classify_image
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -19,7 +19,7 @@ HOST = "127.0.0.1"
 PORT = 8000
 
 
-class DigitRequestHandler(SimpleHTTPRequestHandler):
+class ImageRequestHandler(SimpleHTTPRequestHandler):
     """Serve the website and answer prediction requests."""
 
     def __init__(self, *args, **kwargs):
@@ -43,7 +43,7 @@ class DigitRequestHandler(SimpleHTTPRequestHandler):
             payload = json.loads(self.rfile.read(length).decode("utf-8"))
             image_data = payload.get("image", "")
             image = decode_data_url(image_data)
-            result = predict_digit(image)
+            result = classify_image(image)
             self.send_json(result)
         except Exception as exc:
             self.send_json({"error": str(exc)}, status=400)
@@ -66,8 +66,8 @@ def decode_data_url(data_url: str) -> Image.Image:
 
 
 def main():
-    server = ThreadingHTTPServer((HOST, PORT), DigitRequestHandler)
-    print(f"Digit recognizer website running at http://{HOST}:{PORT}")
+    server = ThreadingHTTPServer((HOST, PORT), ImageRequestHandler)
+    print(f"Image classifier website running at http://{HOST}:{PORT}")
     print("Press Ctrl+C to stop the server.")
     server.serve_forever()
 
