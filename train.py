@@ -1,4 +1,4 @@
-"""Train a CNN on CIFAR-10 and save the model + accuracy report."""
+"""Train a CNN on MNIST and save the model + accuracy report."""
 
 import numpy as np
 from tensorflow import keras
@@ -8,38 +8,17 @@ import os
 
 os.environ.setdefault("MPLCONFIGDIR", os.path.join(os.getcwd(), ".matplotlib"))
 
-CLASS_NAMES = [
-    "airplane",
-    "automobile",
-    "bird",
-    "cat",
-    "deer",
-    "dog",
-    "frog",
-    "horse",
-    "ship",
-    "truck",
-]
-
-EPOCHS = int(os.environ.get("EPOCHS", "10"))
-TRAIN_LIMIT = int(os.environ.get("TRAIN_LIMIT", "0"))
-RANDOM_SEED = 42
-
-# Load & preprocess
-(x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
-y_train = y_train.reshape(-1)
-y_test = y_test.reshape(-1)
-
-if TRAIN_LIMIT:
-    rng = np.random.default_rng(RANDOM_SEED)
-    indices = rng.permutation(len(x_train))[:TRAIN_LIMIT]
-    x_train = x_train[indices]
-    y_train = y_train[indices]
+# ── Load & preprocess ──────────────────────────────────────────────────────────
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
 
 x_train = x_train.astype("float32") / 255.0
 x_test  = x_test.astype("float32")  / 255.0
 
-# Build CNN
+# CNN expects (batch, height, width, channels)
+x_train = x_train[..., np.newaxis]
+x_test  = x_test[..., np.newaxis]
+
+# ── Build CNN ──────────────────────────────────────────────────────────────────
 model = keras.Sequential([
     keras.Input(shape=(32, 32, 3)),
     keras.layers.Conv2D(32, 3, padding="same", activation="relu"),
@@ -70,7 +49,7 @@ model.compile(
 
 model.summary()
 
-# Train
+# ── Train ──────────────────────────────────────────────────────────────────────
 history = model.fit(
     x_train, y_train,
     epochs=EPOCHS,
@@ -79,7 +58,7 @@ history = model.fit(
     verbose=1,
 )
 
-# Evaluate
+# ── Evaluate ───────────────────────────────────────────────────────────────────
 test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
 print(f"\nTest accuracy: {test_acc:.4f}  ({test_acc*100:.2f}%)")
 
@@ -87,12 +66,12 @@ y_pred = np.argmax(model.predict(x_test, verbose=0), axis=1)
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred, target_names=CLASS_NAMES, zero_division=0))
 
-# Save model
+# ── Save model ─────────────────────────────────────────────────────────────────
 os.makedirs("model", exist_ok=True)
 model.save("model/cifar10_classifier.keras")
 print("Model saved to model/cifar10_classifier.keras")
 
-# Save training curves
+# ── Save training curves ───────────────────────────────────────────────────────
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
 ax1.plot(history.history["accuracy"],     label="train")

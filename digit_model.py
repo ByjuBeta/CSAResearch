@@ -1,3 +1,4 @@
+"""Shared model loading and image preprocessing for digit recognition."""
 
 from __future__ import annotations
 
