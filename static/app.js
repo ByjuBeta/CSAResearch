@@ -25,10 +25,10 @@ let lastPoint = null;
 
 function renderProbabilities(probabilities) {
   probabilityList.innerHTML = "";
-  probabilities.forEach((item) => {
+  probabilities.forEach((item, index) => {
     const percent = item.probability * 100;
     const row = document.createElement("div");
-    row.className = "probability-row";
+    row.className = `probability-row${index === 0 ? " is-top" : ""}`;
     row.innerHTML = `
       <strong>${item.label}</strong>
       <span class="bar-track"><span class="bar-fill" style="width: ${percent}%"></span></span>
@@ -54,6 +54,9 @@ function setMode(mode) {
   uploadPanel.hidden = mode !== "upload";
   cameraPanel.hidden = mode !== "camera";
   drawPanel.hidden = mode !== "draw";
+  uploadModeButton.classList.toggle("is-active", mode === "upload");
+  cameraModeButton.classList.toggle("is-active", mode === "camera");
+  drawModeButton.classList.toggle("is-active", mode === "draw");
 }
 
 async function predict() {

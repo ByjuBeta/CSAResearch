@@ -2,51 +2,65 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Image Classifier</title>
     <link rel="stylesheet" href="/static/styles.css">
   </head>
   <body>
-    <h1>Image Classifier</h1>
-    <p>Upload an image, use the camera, or draw something. The model will try to classify it using ImageNet categories.</p>
+    <main class="app">
+      <header class="header">
+        <p class="eyebrow">ImageNet classifier</p>
+        <h1>Image Classifier</h1>
+        <p>Upload a photo, draw a quick sketch, or grab a frame from your camera. The model returns its best ImageNet matches.</p>
+      </header>
 
-    <div>
-      <button id="uploadModeButton" type="button">Upload</button>
-      <button id="cameraModeButton" type="button">Camera</button>
-      <button id="drawModeButton" type="button">Draw</button>
-    </div>
+      <section class="panel">
+        <div class="mode-buttons" aria-label="Input mode">
+          <button id="uploadModeButton" type="button">Upload</button>
+          <button id="cameraModeButton" type="button">Camera</button>
+          <button id="drawModeButton" type="button">Draw</button>
+        </div>
 
-    <div id="uploadPanel">
-      <p><input id="uploadInput" type="file" accept="image/*"></p>
-      <img id="preview" alt="Selected image preview">
-    </div>
+        <div class="workspace">
+          <div class="input-area">
+            <div id="uploadPanel" class="mode-panel">
+              <label class="file-picker">
+                <span>Pick an image to classify</span>
+                <input id="uploadInput" type="file" accept="image/*">
+              </label>
+              <img id="preview" alt="Selected image preview">
+            </div>
 
-    <div id="cameraPanel" hidden>
-      <p>
-        <button id="startCameraButton" type="button">Start Camera</button>
-        <button id="captureButton" type="button" disabled>Capture Frame</button>
-        <button id="stopCameraButton" type="button" disabled>Stop Camera</button>
-      </p>
-      <video id="cameraVideo" autoplay playsinline></video>
-    </div>
+            <div id="cameraPanel" class="mode-panel" hidden>
+              <div class="button-row">
+                <button id="startCameraButton" type="button">Start Camera</button>
+                <button id="captureButton" type="button" disabled>Capture Frame</button>
+                <button id="stopCameraButton" type="button" disabled>Stop Camera</button>
+              </div>
+              <video id="cameraVideo" autoplay playsinline></video>
+            </div>
 
-    <div id="drawPanel" hidden>
-      <p>
-        <button id="clearDrawingButton" type="button">Clear Drawing</button>
-      </p>
-      <canvas id="drawCanvas" width="320" height="320"></canvas>
-      <p>Drawings may be less accurate because the model was trained mostly on photos.</p>
-    </div>
+            <div id="drawPanel" class="mode-panel" hidden>
+              <div class="button-row">
+                <button id="clearDrawingButton" type="button">Clear Drawing</button>
+              </div>
+              <canvas id="drawCanvas" width="320" height="320"></canvas>
+              <p class="note">Drawings may be less accurate because the model was trained mostly on photos.</p>
+            </div>
 
-    <p>
-      <button id="predictButton" type="button" disabled>Classify</button>
-    </p>
+            <button id="predictButton" class="primary" type="button" disabled>Classify</button>
+          </div>
 
-    <div>
-      <p>Prediction: <strong id="labelResult">?</strong></p>
-      <p id="confidenceResult">Confidence: -</p>
-      <h2>Related results</h2>
-      <div id="probabilityList"></div>
-    </div>
+          <aside class="results">
+            <p class="eyebrow">Result</p>
+            <p class="prediction">Prediction: <strong id="labelResult">?</strong></p>
+            <p id="confidenceResult" class="confidence">Confidence: -</p>
+            <h2>Related results</h2>
+            <div id="probabilityList" class="probability-list"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
 
     <script src="/static/app.js"></script>
   </body>
